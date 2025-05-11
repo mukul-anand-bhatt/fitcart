@@ -361,34 +361,108 @@ async def extract_data(image_file: UploadFile = File(...)):
                 img = img.convert('RGB')
             
             # Define prompt for data extraction
+
             prompt = """
-            Extract the following information from the image and return it as a well-structured JSON:  
+                Generate a detailed JSON response for a food product with the following structure. Ensure all fields are populated with realistic values, using "Not Specified" where data is unavailable. Maintain consistent field naming and units as shown in the examples.
 
-            1. **Ingredients:**  
-               - List all ingredients along with their percentages.  
+                Structure:
+                {
+                    "Product Name": "[Product Name]",
+                    "Ingredients": {
+                        "main": ["list of main ingredients"],
+                        "additives": ["list of additives/preservatives"] (optional)
+                    },
+                    "Nutritional Facts": {
+                        "per_100g": {
+                            "energy" or "energy_kcal": [number],
+                            "protein" or "protein_g": [number],
+                            "carbohydrate" or "carbohydrate_g": [number],
+                            "total_sugars" or "total_sugars_g": [number],
+                            "total_fat" or "total_fat_g": [number],
+                            "saturated_fat" or "saturated_fat_g": [number],
+                            "sodium" or "sodium_mg": [number],
+                            "cholesterol" or "cholesterol_mg": [number or string],
+                            "vitamins": {object with details} or "Not Specified",
+                            "minerals": {object with details} or "Not Specified"
+                        },
+                        "per_serving": {
+                            (same structure as per_100g)
+                        }
+                    },
+                    "Serving Information": {
+                        "serving_size": "[amount with unit]",
+                        "servings_per_pack": [number or string]
+                    },
+                    "Health Analysis": {
+                        "nutrient_exceedances": {
+                            "saturated_fat": "Yes/No",
+                            "sodium": "Yes/No"
+                        },
+                        "summary": "[2-3 sentence health assessment mentioning key nutrients and considerations]"
+                    }
+                }
 
-            2. **Nutritional Facts:**  
-               - Per 100g  
-               - Per serving  
-               - Include: calories, fats (saturated, trans, unsaturated), carbohydrates (sugars, fiber), protein, sodium, cholesterol, vitamins, and minerals.  
+                Additional Requirements:
+                1. Use consistent naming (either snake_case or spaces, but don't mix)
+                2. Maintain the same level of detail as the examples provided
+                3. Include realistic values for the product type
+                4. For vitamins/minerals, either provide specific values or "Not Specified"
+                5. Health analysis should be based on the nutritional data
+                6. Use either per_100g/per_serving OR per 100g/per serving format consistently
+                7. For cholesterol, use numbers or "<0.10" format when relevant
 
-            3. **Serving Information:**  
-               - Serving size  
-               - Servings per pack  
+                Generate this for a [insert product type/category here] product.
+                """
 
-            4. **Health Analysis:**  
-               - Identify which nutrients exceed daily human dietary recommendations (based on standard guidelines like FDA/WHO).  
-               - Calculate the maximum recommended daily consumption of this product based on:  
-                 - Total calories  
-                 - Sugar content  
-                 - Sodium levels  
-                 - Saturated/trans fats  
-               - Provide a brief summary of how much a person can safely consume per day without exceeding healthy limits.  
 
-            Ensure the JSON keys are properly structured and human-readable. If any data is missing or unclear, note it as "Not Specified".  
-            """
 
-            # Generate response from AI model
+
+
+            # prompt = """
+            # Extract the following information from the image and return it as a well-structured JSON:
+
+            # 1. **Product Name:**  
+            # - The name of the product being scanned.
+
+            # 2. **Ingredients:**  
+            # - List of ingredients present in the product. Each ingredient should include its name and, if available, its percentage composition.
+
+            # 3. **Allergens:**  
+            # - List of allergens present in the product if specified on the packaging.
+
+            # 4. **Nutritional Facts (per 100g):**  
+            # - Include the following nutritional components:
+            #     - Energy (in kcal)
+            #     - Protein (in grams)
+            #     - Carbohydrates (total and sugars, in grams)
+            #     - Total fat (in grams)
+            #     - Saturated fat (in grams)
+            #     - Trans fat (in grams, specify if "<0.01" or similar)
+            #     - Cholesterol (in mg, specify if "<0.01" or similar)
+            #     - Sodium (in mg)
+            #     - Dietary fiber (in grams, specify if "Not Specified")
+            #     - Vitamins (if available, specify if "Not Specified")
+            #     - Minerals (if available, specify if "Not Specified")
+
+            # Ensure the JSON keys are consistent and human-readable. If any data point is missing or unclear based on the image, mark it as "Not Specified".
+
+            # """
+            
+            # 3. **Serving Information:**  
+            #    - Serving size  
+            #    - Servings per pack  
+
+            # 4. **Health Analysis:**  
+            #    - Identify which nutrients exceed daily human dietary recommendations (based on standard guidelines like FDA/WHO).  
+            #    - Calculate the maximum recommended daily consumption of this product based on:  
+            #      - Total calories  
+            #      - Sugar content  
+            #      - Sodium levels  
+            #      - Saturated/trans fats  
+            #    - Provide a brief summary of how much a person can safely consume per day without exceeding healthy limits.  
+
+
+            # # Generate response from AI model
             response = model.generate_content([img, prompt])
 
         # Process the response
