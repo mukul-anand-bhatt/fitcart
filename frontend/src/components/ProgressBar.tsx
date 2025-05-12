@@ -32,24 +32,20 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         style={{ height }}
       >
         <div
-          className={`transition-all duration-1000 ease-out ${animate ? 'animate-grow' : ''}`}
+          className="transition-all duration-1000 ease-out"
           style={{ 
             width: animate ? '0%' : `${clampedPercentage}%`,
             height,
             backgroundColor: color,
+            animation: animate ? 'growWidth 1.5s forwards ease-out' : 'none',
           }}
         />
       </div>
-      <style>
-        {`
-          @keyframes growWidth {
-            to { width: ${clampedPercentage}%; }
-          }
-          .animate-grow {
-            animation: growWidth 1.5s forwards ease-out;
-          }
-        `}
-      </style>
+      <style jsx>{`
+        @keyframes growWidth {
+          to { width: ${clampedPercentage}%; }
+        }
+      `}</style>
     </div>
   );
 };

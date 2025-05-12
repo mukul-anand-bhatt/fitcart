@@ -1,7 +1,7 @@
 import { FoodProduct } from '../types';
 
 export const sampleProduct: FoodProduct = {
-  "Product Name": "SAMPLE PRODUCT NAME MAGGI Masala Noodles",
+  "Product Name": "Sample Product - MAGGI Masala Noodles",
   "Ingredients": {
     "main": [
       "Wheat gluten",
