@@ -7,6 +7,7 @@ import NutritionFacts from './components/NutritionFacts';
 import HealthSummary from './components/HealthSummary';
 import ProductSelector from './components/ProductSelector';
 // import ThemeToggle from './components/ThemeToggle';
+import { Analytics } from '@vercel/analytics/next';
 function App() {
   const [product, setProduct] = useState<FoodProduct>(sampleProduct);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,9 +22,9 @@ function App() {
       
       <header className="bg-gradient-to-r from-green-600 to-blue-600 shadow-md relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
-          <div className="flex justify-between items-center">
+          <div className=" flex justify-center items-center">
             <div>
-              <h1 className="text-2xl font-bold text-white">
+              <h1 className="text-2xl font-bold text-white ">
                 Food Health Analyzer
               </h1>
               <p className="text-green-50 mt-1">
@@ -85,6 +86,7 @@ function App() {
           </p>
         </div>
       </footer>
+      <Analytics />
     </div>
   );
 }
