@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { getNutrientColor } from '../utils/healthAnalysis';
 
 interface ProgressBarProps {
@@ -18,11 +18,25 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 }) => {
   const clampedPercentage = Math.min(100, Math.max(0, percentage));
   const color = getNutrientColor(clampedPercentage);
+  const progressRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (progressRef.current) {
+      if (animate) {
+        progressRef.current.style.width = '0%';
+        // Force reflow to ensure animation starts from 0
+        progressRef.current.getBoundingClientRect();
+        progressRef.current.style.width = `${clampedPercentage}%`;
+      } else {
+        progressRef.current.style.width = `${clampedPercentage}%`;
+      }
+    }
+  }, [clampedPercentage, animate]);
 
   return (
     <div className="w-full">
       {label && (
-        <div className="flex justify-between mb-1 text-sm">
+        <div className="flex justify-between mb-1 text-sm text-gray-800 dark:text-gray-200">
           <span>{label}</span>
           {showPercentage && <span>{clampedPercentage}%</span>}
         </div>
@@ -32,20 +46,15 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         style={{ height }}
       >
         <div
+          ref={progressRef}
           className="transition-all duration-1000 ease-out"
           style={{ 
-            width: animate ? '0%' : `${clampedPercentage}%`,
-            height,
+            height: '100%',
             backgroundColor: color,
-            animation: animate ? 'growWidth 1.5s forwards ease-out' : 'none',
+            width: animate ? '0%' : `${clampedPercentage}%`,
           }}
         />
       </div>
-      <style jsx>{`
-        @keyframes growWidth {
-          to { width: ${clampedPercentage}%; }
-        }
-      `}</style>
     </div>
   );
 };

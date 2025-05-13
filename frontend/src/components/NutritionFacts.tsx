@@ -93,7 +93,7 @@ const NutritionFacts: React.FC<NutritionFactsProps> = ({
           <span className="dark:text-gray-300">{getEnergyKcal()} kcal</span>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 ">
           <div>
             <ProgressBar
               percentage={getNutrientPercentage(

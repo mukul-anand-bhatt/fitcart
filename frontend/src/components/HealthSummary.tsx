@@ -18,6 +18,7 @@ const HealthSummary: React.FC<HealthSummaryProps> = ({ healthAnalysis, product }
     if (score >= 60) return 'Good';
     if (score >= 50) return 'Fair';
     if (score >= 30) return 'Poor';
+    if (!score) return 'Refer Health Summary';
     return 'Concerning';
   };
   

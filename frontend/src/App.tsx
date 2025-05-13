@@ -6,7 +6,7 @@ import IngredientsList from './components/IngredientsList';
 import NutritionFacts from './components/NutritionFacts';
 import HealthSummary from './components/HealthSummary';
 import ProductSelector from './components/ProductSelector';
-
+// import ThemeToggle from './components/ThemeToggle';
 function App() {
   const [product, setProduct] = useState<FoodProduct>(sampleProduct);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +30,7 @@ function App() {
                 Detailed nutritional analysis and health recommendations
               </p>
             </div>
+            {/* <ThemeToggle /> */}
           </div>
         </div>
       </header>
