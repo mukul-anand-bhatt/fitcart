@@ -7,7 +7,8 @@ import NutritionFacts from './components/NutritionFacts';
 import HealthSummary from './components/HealthSummary';
 import ProductSelector from './components/ProductSelector';
 // import ThemeToggle from './components/ThemeToggle';
-import { Analytics } from '@vercel/analytics/next';
+// import { Analytics } from '@vercel/analytics/next';
+
 function App() {
   const [product, setProduct] = useState<FoodProduct>(sampleProduct);
   const [isLoading, setIsLoading] = useState(false);
@@ -86,7 +87,7 @@ function App() {
           </p>
         </div>
       </footer>
-      <Analytics />
+      {/* <Analytics /> */}
     </div>
   );
 }
